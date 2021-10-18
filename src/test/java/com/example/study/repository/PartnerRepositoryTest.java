@@ -1,18 +1,23 @@
 package com.example.study.repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.study.StudyApplicationTests;
+import com.example.study.model.entity.Category;
 import com.example.study.model.entity.Partner;
 
 public class PartnerRepositoryTest extends StudyApplicationTests {
 	
 	@Autowired
 	private PartnerRepository repo;
+	
+	@Autowired
+	private CategoryRepository categoryRepo;
 	
 	@Test
 	public void create() {
@@ -29,7 +34,11 @@ public class PartnerRepositoryTest extends StudyApplicationTests {
 		partner.setRegisteredAt(LocalDateTime.now());
 		partner.setCreatedAt(LocalDateTime.now());
 		partner.setCreatedBy("AdminServer");
-//		partner.setCategoryId(1L);
+		
+		Optional<Category> category = categoryRepo.findById(1L);
+		category.ifPresent(c -> {
+			partner.setCategory(c);
+		});
 		
 		Partner newPartner = repo.save(partner);
 		Assertions.assertNotNull(newPartner);

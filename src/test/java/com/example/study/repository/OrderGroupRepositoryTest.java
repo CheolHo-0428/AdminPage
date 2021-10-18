@@ -2,6 +2,7 @@ package com.example.study.repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,11 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.OrderGroup;
+import com.example.study.model.entity.Users;
 
 public class OrderGroupRepositoryTest extends StudyApplicationTests{
 	
 	@Autowired
 	private OrderGroupRepository repo;
+	
+	@Autowired
+	private UsersRepository userRepo;
 	
 	@Test
 	public void create() {
@@ -30,9 +35,18 @@ public class OrderGroupRepositoryTest extends StudyApplicationTests{
 		orderGroup.setArrivalDate(LocalDateTime.now());
 		orderGroup.setCreatedAt(LocalDateTime.now());
 		orderGroup.setCreatedBy("AdminServer");
-//		orderGroup.setUsersId(1L);
+		
+		Optional<Users> users = userRepo.findById(1L);
+		users.ifPresent(user -> {
+			orderGroup.setUsers(user);
+		});
 		
 		OrderGroup newOg = repo.save(orderGroup);
 		Assertions.assertNotNull(newOg);
+	}
+	
+	//@Test
+	public void read() {
+		
 	}
 }

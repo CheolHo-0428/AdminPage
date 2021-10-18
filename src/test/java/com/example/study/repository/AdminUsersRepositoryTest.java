@@ -1,7 +1,5 @@
 package com.example.study.repository;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +19,14 @@ public class AdminUsersRepositoryTest extends StudyApplicationTests{
 		adminUsers.setPassword("12345");
 		adminUsers.setStatus("REGISTERED");
 		adminUsers.setRole("SUPER");
-		adminUsers.setCreatedAt(LocalDateTime.now());
-		adminUsers.setCreatedBy("AdminServer");
+//		adminUsers.setCreatedAt(LocalDateTime.now());
+//		adminUsers.setCreatedBy("AdminServer");
 		
 		AdminUsers newAd = repo.save(adminUsers);
 		
 		Assertions.assertNotNull(newAd);
+		
+		newAd.setAccount("AdminUser03");
+		repo.save(newAd);
 	}
 }

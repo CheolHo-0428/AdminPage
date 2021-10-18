@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Users;
@@ -14,31 +15,75 @@ import com.example.study.model.entity.Users;
 public class UsersRepositroyTest extends StudyApplicationTests {
 	
 	@Autowired
-	private UserRepository userRepositoy;
+	private UsersRepository userRepositoy;
 	
 	@Test
 	public void create() {
-		Users users = new Users();
-		users.setAccount("Test01");
-		users.setPassword("12345");
-		users.setStatus("REGISTERED");
-		users.setEmail("Test01@gmail.com");
-		users.setPhoneNumber("010-111-1111");
-		users.setRegisteredAt(LocalDateTime.now());
-		users.setCreatedAt(LocalDateTime.now());
-		users.setCreatedBy("AdminServer");
+		String account = "Test04";
+		String password = "12345";
+		String status = "REGISTERED";
+		String email = "Test04@gmail.com";
+		String phoneNumber = "010-111-4444";
+		LocalDateTime registeredAt = LocalDateTime.now();
 		
-		Users newUsers = userRepositoy.save(users);
+//		Users users = new Users();
+//		users.setAccount(account);
+//		users.setPassword(password);
+//		users.setStatus(status);
+//		users.setEmail(email);
+//		users.setPhoneNumber(phoneNumber);
+//		users.setRegisteredAt(registeredAt);
+//		users.setCreatedAt(LocalDateTime.now());
+//		users.setCreatedBy("AdminServer");
 		
-		Assertions.assertNotNull(newUsers);
+//		Users newUsers = userRepositoy.save(users);
+		
+//		Assertions.assertNotNull(newUsers);
+		
+		//Builder 방식 create를 할경우 자주 사용		
+//		Users newUsers1 = Users.builder().account(account).
+//				password(password).status(status).email(email).
+//				phoneNumber(phoneNumber).registeredAt(registeredAt).build();
+//		
+//		userRepositoy.save(newUsers1);
+		
+		//체이닝방식 update를 할경우 자주 사용
+		Users newUser2 = new Users().setAccount(account)
+								.setPassword(password)
+								.setStatus(status)
+								.setEmail(email)
+								.setPhoneNumber(phoneNumber)
+								.setRegisteredAt(registeredAt);
+		
+		userRepositoy.save(newUser2);
+		
+		
 		
 	}
 	
 	//@Test
+	//@Transactional
 	public void read() {
-		Users users = userRepositoy.findByPhoneNumberOrderByIdDesc("010-111-2222");
+		Users users = userRepositoy.findByPhoneNumberOrderByIdDesc("010-111-1111");
 		Assertions.assertNotNull(users);
-		System.out.println(users.toString());
+		
+		users.getOrderGroupList().stream().forEach(orderGroup -> {
+			System.out.println("-------------------주문묶음-------------------");
+			System.out.println("수령인: " + orderGroup.getRevName());
+			System.out.println("수령지: " + orderGroup.getRevAddress());
+			System.out.println("총금액: " + orderGroup.getTotalPrice());
+			System.out.println("총수량: " + orderGroup.getTotalQuantity());
+			
+			System.out.println("-------------------주문상세-------------------");
+			orderGroup.getOrderDetailList().stream().forEach(orderDetail -> {
+				System.out.println("주문상태: " + orderDetail.getStatus());
+				System.out.println("도착예정일자: " + orderDetail.getArrivalDate());
+				System.out.println("주문상품: " + orderDetail.getItem().getName());
+				System.out.println("고객센터: " + orderDetail.getItem().getPartner().getCallCenter());
+				System.out.println("파트너사: " + orderDetail.getItem().getPartner().getName());
+				System.out.println("카테고리: " + orderDetail.getItem().getPartner().getCategory().getTitle());
+			});
+		});
 	}
 	
 	//@Test

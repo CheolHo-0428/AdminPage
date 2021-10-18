@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Item;
+import com.example.study.model.entity.Partner;
 
 public class ItemRepositoryTest extends StudyApplicationTests{
 	
 	@Autowired
-	ItemRepositroy repo;
+	private ItemRepositroy repo;
+	
+	@Autowired
+	private PartnerRepository partnerRepo;
 	
 	@Test
 	public void create() {
@@ -27,7 +31,11 @@ public class ItemRepositoryTest extends StudyApplicationTests{
 		item.setRegisteredAt(LocalDateTime.now());
 		item.setCreatedAt(LocalDateTime.now());
 		item.setCreatedBy("AdminServer");
-//		item.setPartnerId(1L);
+		
+		Optional<Partner> partner = partnerRepo.findById(1L);
+		partner.ifPresent(p -> {
+			item.setPartner(p);
+		});
 		
 		Item newItem = repo.save(item);
 		Assertions.assertNotNull(newItem);

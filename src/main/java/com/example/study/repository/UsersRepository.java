@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.example.study.model.entity.Users;
 
 @Repository
-public interface UserRepository extends JpaRepository<Users,Long>{
+public interface UsersRepository extends JpaRepository<Users,Long>{
 
 	//select * from users where phone_number = ? order by id desc
 	Users findByPhoneNumberOrderByIdDesc(String phoneNumber);
