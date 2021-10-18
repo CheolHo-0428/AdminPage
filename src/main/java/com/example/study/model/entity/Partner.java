@@ -1,6 +1,5 @@
 package com.example.study.model.entity;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -12,25 +11,34 @@ import javax.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
-public class OrderDetail {
+public class Partner {
 	
 	@Id
-	@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "OrderDetail_SEQUENCE_GENERATOR")
-	@SequenceGenerator(name = "OrderDetail_SEQUENCE_GENERATOR", sequenceName = "OrderDetail_SEQUENCE", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "Partner_SEQUENCE_GENERATOR")
+	@SequenceGenerator(name = "Partner_SEQUENCE_GENERATOR", sequenceName = "Partner_SEQUENCE", initialValue = 1, allocationSize = 1)
 	private Long id;
+	
+	private String name;
 	
 	private String status;
 	
-	private LocalDateTime arrivalDate;
+	private String address;
 	
-	private Integer quantity;
+	private String callCenter;
 	
-	private BigDecimal totalPrice;
+	private String partnerNumber;
+	
+	private String businessNumber;
+	
+	private String ceoName;
+	
+	private LocalDateTime registeredAt;
+	
+	private LocalDateTime unregisteredAt;
 	
 	private LocalDateTime createdAt;
 	
@@ -40,9 +48,5 @@ public class OrderDetail {
 	
 	private String updatedBy;
 	
-//	private Long orderGroupId;
-	
-//	private Long itemId;
-	
-	
+//	private Long categoryId;
 }

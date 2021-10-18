@@ -1,5 +1,6 @@
 package com.example.study.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Assertions;
@@ -18,8 +19,14 @@ public class OrderDetailRepositoryTest extends StudyApplicationTests {
 	public void create() {
 		
 		OrderDetail od = new OrderDetail();
-		od.setUserr(null);
-		od.setOrderAt(LocalDateTime.now());
+		od.setStatus("WAITING");
+		od.setArrivalDate(LocalDateTime.now().plusDays(2));
+		od.setQuantity(1);
+		od.setTotalPrice(BigDecimal.valueOf(100000));
+		od.setCreatedAt(LocalDateTime.now());
+		od.setCreatedBy("AdminServer");
+//		od.setOrderGroupId(1L);
+//		od.setItemId(1L);
 		
 		OrderDetail newod =  repo.save(od);
 		

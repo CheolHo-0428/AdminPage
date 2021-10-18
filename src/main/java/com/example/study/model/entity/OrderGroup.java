@@ -13,24 +13,34 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
-public class OrderDetail {
+public class OrderGroup {
 	
 	@Id
-	@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "OrderDetail_SEQUENCE_GENERATOR")
-	@SequenceGenerator(name = "OrderDetail_SEQUENCE_GENERATOR", sequenceName = "OrderDetail_SEQUENCE", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "OrderGroup_SEQUENCE_GENERATOR")
+	@SequenceGenerator(name = "OrderGroup_SEQUENCE_GENERATOR", sequenceName = "OrderGroup_SEQUENCE", initialValue = 1, allocationSize = 1)
 	private Long id;
 	
 	private String status;
 	
-	private LocalDateTime arrivalDate;
+	private String orderType;
 	
-	private Integer quantity;
+	private String revAddress;
+	
+	private String revName;
+	
+	private String paymentType;
 	
 	private BigDecimal totalPrice;
+	
+	private Integer totalQuantity;
+	
+	private LocalDateTime orderAt;
+	
+	private LocalDateTime arrivalDate;
 	
 	private LocalDateTime createdAt;
 	
@@ -40,9 +50,6 @@ public class OrderDetail {
 	
 	private String updatedBy;
 	
-//	private Long orderGroupId;
-	
-//	private Long itemId;
-	
+//	private Long userId;
 	
 }

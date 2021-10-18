@@ -1,13 +1,12 @@
 package com.example.study.model.entity;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,15 +19,36 @@ import lombok.NoArgsConstructor;
 public class Item {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "Item_SEQUENCE_GENERATOR")
+	@SequenceGenerator(name = "Item_SEQUENCE_GENERATOR", sequenceName = "Item_SEQUENCE", initialValue = 1, allocationSize = 1)
 	private Long id;
+	
+	private String status;
 	
 	private String name;
 	
-	private Integer price;
-	
+	private String title;
+
 	private String content;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
-	private List<OrderDetail> orderDetail;
+	private Integer price;
+	
+	private String brandName;
+	
+	private LocalDateTime registeredAt;
+	
+	private LocalDateTime unregisteredAt;
+	
+	private LocalDateTime createdAt;
+	
+	private String createdBy;
+	
+	private LocalDateTime updatedAt;
+	
+	private String updatedBy;
+	
+//	private Long partnerId;
+	
+	
+	
 }
