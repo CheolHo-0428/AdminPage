@@ -1,5 +1,6 @@
 package com.example.study.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class ItemRepositoryTest extends StudyApplicationTests{
 		item.setName("삼성 아트북");
 		item.setTitle("삼성 아트북 A-100");
 		item.setContent("2021년형 신형 노트북");
-		item.setPrice(1000000);
+		item.setPrice(BigDecimal.valueOf(1000000));
 		item.setBrandName("삼성");
 		item.setRegisteredAt(LocalDateTime.now());
 		item.setCreatedAt(LocalDateTime.now());
