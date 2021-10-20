@@ -14,7 +14,7 @@ import com.example.study.ifs.CrudInterface;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.OrderDetailApiRequest;
 import com.example.study.model.network.response.OrderDetailApiResponse;
-import com.example.study.service.OrderDetailApiService;
+import com.example.study.service.OrderDetailApiLogicService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderDetailApiController implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
 	
 	@Autowired
-	private OrderDetailApiService service;
+	private OrderDetailApiLogicService service;
 	
 	@Override
 	@PostMapping("")

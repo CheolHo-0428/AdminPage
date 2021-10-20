@@ -12,37 +12,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.network.Header;
-import com.example.study.model.network.request.OrderGroupApiRequest;
-import com.example.study.model.network.response.OrderGroupApiResponse;
-import com.example.study.service.OrderGroupApiLogicService;
+import com.example.study.model.network.request.PartnerApiRequest;
+import com.example.study.model.network.response.PartnerApiResponse;
+import com.example.study.service.PartnerApiLogicService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/orderGroup")
-public class OrderGroupApiController implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
-
+@RequestMapping("/api/partner")
+public class PartnerApiController implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
+	
 	@Autowired
-	private OrderGroupApiLogicService service;
+	private PartnerApiLogicService service;
 	
 	@Override
 	@PostMapping("")
-	public Header<OrderGroupApiResponse> create(@RequestBody Header<OrderGroupApiRequest> request) {
+	public Header<PartnerApiResponse> create(@RequestBody Header<PartnerApiRequest> request) {
 		log.info("{}", request);
 		return service.create(request);
 	}
 
 	@Override
 	@GetMapping("{id}")
-	public Header<OrderGroupApiResponse> read(@PathVariable Long id) {
+	public Header<PartnerApiResponse> read(@PathVariable Long id) {
 		log.info("read id: {}", id);
 		return service.read(id);
 	}
 
 	@Override
 	@PutMapping("")
-	public Header<OrderGroupApiResponse> update(@RequestBody Header<OrderGroupApiRequest> request) {
+	public Header<PartnerApiResponse> update(@RequestBody Header<PartnerApiRequest> request) {
 		log.info("{}", request);
 		return service.update(request);
 	}
@@ -54,4 +54,5 @@ public class OrderGroupApiController implements CrudInterface<OrderGroupApiReque
 		return service.delete(id);
 	}
 
+	
 }

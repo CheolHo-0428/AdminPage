@@ -15,7 +15,7 @@ import com.example.study.repository.OrderDetailRepository;
 import com.example.study.repository.OrderGroupRepository;
 
 @Service
-public class OrderDetailApiService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
+public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
 	
 	@Autowired
 	private OrderDetailRepository orderDetailRepo;

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.OrderGroup;
@@ -15,7 +16,7 @@ import com.example.study.repository.OrderGroupRepository;
 import com.example.study.repository.UsersRepository;
 
 @Service
-public class OrderGroupApiService implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
+public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
 	
 	@Autowired
 	private OrderGroupRepository orderGroupRepo;
