@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Users;
+import com.example.study.model.enums.UserStatus;
 
 
 public class UsersRepositroyTest extends StudyApplicationTests {
@@ -50,7 +51,7 @@ public class UsersRepositroyTest extends StudyApplicationTests {
 		//체이닝방식 update를 할경우 자주 사용
 		Users newUser2 = new Users().setAccount(account)
 								.setPassword(password)
-								.setStatus(status)
+								.setStatus(UserStatus.REGISTERED)
 								.setEmail(email)
 								.setPhoneNumber(phoneNumber)
 								.setRegisteredAt(registeredAt);

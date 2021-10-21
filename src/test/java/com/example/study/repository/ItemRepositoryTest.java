@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Item;
 import com.example.study.model.entity.Partner;
+import com.example.study.model.enums.ItemStatus;
 
 public class ItemRepositoryTest extends StudyApplicationTests{
 	
@@ -23,7 +24,7 @@ public class ItemRepositoryTest extends StudyApplicationTests{
 	@Test
 	public void create() {
 		Item item = new Item();
-		item.setStatus("UNREGISTERED");
+		item.setStatus(ItemStatus.REGISTERED);
 		item.setName("삼성 아트북");
 		item.setTitle("삼성 아트북 A-100");
 		item.setContent("2021년형 신형 노트북");

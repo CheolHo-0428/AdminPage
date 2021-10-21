@@ -3,8 +3,7 @@ package com.example.study.model.network.response;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.example.study.model.entity.Item;
-import com.example.study.model.entity.OrderGroup;
+import com.example.study.model.enums.OrderDetailStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +18,7 @@ public class OrderDetailApiResponse {
 	
 	private Long id;
 	
-	private String status;
+	private OrderDetailStatus status;
 	
 	private LocalDateTime arrivalDate;
 	

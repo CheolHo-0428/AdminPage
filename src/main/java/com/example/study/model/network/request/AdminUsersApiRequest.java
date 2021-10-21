@@ -2,6 +2,9 @@ package com.example.study.model.network.request;
 
 import java.time.LocalDateTime;
 
+import com.example.study.model.enums.AdminUsersRole;
+import com.example.study.model.enums.AdminUsersStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,9 +22,9 @@ public class AdminUsersApiRequest {
 	
 	private String password;
 	
-	private String status;
+	private AdminUsersStatus status;
 	
-	private String role;
+	private AdminUsersRole role;
 	
 	private LocalDateTime lastLoginAt;
 	

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.example.study.model.enums.OrderGroupOrderType;
+import com.example.study.model.enums.OrderGroupPaymentType;
+import com.example.study.model.enums.OrderGroupStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,15 +48,18 @@ public class OrderGroup {
 	@SequenceGenerator(name = "OrderGroup_SEQUENCE_GENERATOR", sequenceName = "OrderGroup_SEQUENCE", initialValue = 1, allocationSize = 1)
 	private Long id;
 	
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private OrderGroupStatus status;
 	
-	private String orderType;
+	@Enumerated(EnumType.STRING)
+	private OrderGroupOrderType orderType;
 	
 	private String revAddress;
 	
 	private String revName;
 	
-	private String paymentType;
+	@Enumerated(EnumType.STRING)
+	private OrderGroupPaymentType paymentType;
 	
 	private BigDecimal totalPrice;
 	

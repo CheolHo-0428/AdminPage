@@ -1,5 +1,7 @@
 package com.example.study.model.network.request;
 
+import com.example.study.model.enums.CategoryType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +15,7 @@ public class CategoryApiRequest {
 	
 	private Long id;
 	
-	private String type;
+	private CategoryType type;
 	
 	private String title;
 }

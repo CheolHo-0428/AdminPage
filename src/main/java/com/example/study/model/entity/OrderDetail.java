@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.example.study.model.enums.OrderDetailStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,7 +43,8 @@ public class OrderDetail {
 	@SequenceGenerator(name = "OrderDetail_SEQUENCE_GENERATOR", sequenceName = "OrderDetail_SEQUENCE", initialValue = 1, allocationSize = 1)
 	private Long id;
 	
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private OrderDetailStatus status;
 	
 	private LocalDateTime arrivalDate;
 	

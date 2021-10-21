@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Category;
+import com.example.study.model.enums.CategoryType;
 
 public class CategoryRepositoryTest extends StudyApplicationTests{
 	
@@ -19,7 +20,7 @@ public class CategoryRepositoryTest extends StudyApplicationTests{
 	public void create() {
 		Category category = new Category();
 		
-		category.setType("COMPUTER");
+		category.setType(CategoryType.COMPUTER);
 		category.setTitle("삼성컴퓨터");
 		category.setCreatedAt(LocalDateTime.now());
 		category.setCreatedBy("AdminServer");

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Category;
 import com.example.study.model.entity.Partner;
+import com.example.study.model.enums.PartnerStatus;
 
 public class PartnerRepositoryTest extends StudyApplicationTests {
 	
@@ -25,7 +26,7 @@ public class PartnerRepositoryTest extends StudyApplicationTests {
 		Partner partner = new Partner();
 		
 		partner.setName("Partner01");
-		partner.setStatus("REGISTERED");
+		partner.setStatus(PartnerStatus.REGISTERED);
 		partner.setAddress("서울시 강남구");
 		partner.setCallCenter("070-1111-9988");
 		partner.setPartnerNumber("070-333-9988");

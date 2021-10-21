@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.AdminUsers;
+import com.example.study.model.enums.AdminUsersRole;
+import com.example.study.model.enums.AdminUsersStatus;
 
 public class AdminUsersRepositoryTest extends StudyApplicationTests{
 	@Autowired
@@ -17,8 +19,8 @@ public class AdminUsersRepositoryTest extends StudyApplicationTests{
 		
 		adminUsers.setAccount("AdminUser01");
 		adminUsers.setPassword("12345");
-		adminUsers.setStatus("REGISTERED");
-		adminUsers.setRole("SUPER");
+		adminUsers.setStatus(AdminUsersStatus.REGISTERED);
+		adminUsers.setRole(AdminUsersRole.MANAGER);
 //		adminUsers.setCreatedAt(LocalDateTime.now());
 //		adminUsers.setCreatedBy("AdminServer");
 		

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +16,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.example.study.model.enums.AdminUsersRole;
+import com.example.study.model.enums.AdminUsersStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,9 +44,11 @@ public class AdminUsers {
 	
 	private String password;
 	
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private AdminUsersStatus status;
 	
-	private String role;
+	@Enumerated(EnumType.STRING)
+	private AdminUsersRole role;
 	
 	private LocalDateTime lastLoginAt;
 	

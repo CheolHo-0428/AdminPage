@@ -12,6 +12,7 @@ import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.Item;
 import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.entity.OrderGroup;
+import com.example.study.model.enums.OrderDetailStatus;
 
 public class OrderDetailRepositoryTest extends StudyApplicationTests {
 	
@@ -28,7 +29,7 @@ public class OrderDetailRepositoryTest extends StudyApplicationTests {
 	public void create() {
 		
 		OrderDetail od = new OrderDetail();
-		od.setStatus("WAITING");
+		od.setStatus(OrderDetailStatus.REGISTERED);
 		od.setArrivalDate(LocalDateTime.now().plusDays(2));
 		od.setQuantity(1);
 		od.setTotalPrice(BigDecimal.valueOf(100000));

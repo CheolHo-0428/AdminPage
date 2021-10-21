@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.OrderGroup;
 import com.example.study.model.entity.Users;
+import com.example.study.model.enums.OrderGroupOrderType;
+import com.example.study.model.enums.OrderGroupPaymentType;
+import com.example.study.model.enums.OrderGroupStatus;
 
 public class OrderGroupRepositoryTest extends StudyApplicationTests{
 	
@@ -24,11 +27,11 @@ public class OrderGroupRepositoryTest extends StudyApplicationTests{
 	public void create() {
 		OrderGroup orderGroup = new OrderGroup();
 		
-		orderGroup.setStatus("COMPLETE");
-		orderGroup.setOrderType("ALL");
+		orderGroup.setStatus(OrderGroupStatus.READY);
+		orderGroup.setOrderType(OrderGroupOrderType.ALL);
 		orderGroup.setRevAddress("서울시 강남구");
 		orderGroup.setRevName("홍길순");
-		orderGroup.setPaymentType("CARD");
+		orderGroup.setPaymentType(OrderGroupPaymentType.CARD);
 		orderGroup.setTotalPrice(BigDecimal.valueOf(9000000));
 		orderGroup.setTotalQuantity(1);
 		orderGroup.setOrderAt(LocalDateTime.now().minusDays(2));
