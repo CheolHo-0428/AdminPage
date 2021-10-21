@@ -1,5 +1,7 @@
 package com.example.study.controller.api;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.study.controller.CrudController;
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.PartnerApiRequest;
@@ -18,14 +21,20 @@ import com.example.study.service.PartnerApiLogicService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+//@Slf4j
 @RestController
 @RequestMapping("/api/partner")
-public class PartnerApiController implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
+public class PartnerApiController extends CrudController<PartnerApiRequest, PartnerApiResponse> {
 	
 	@Autowired
 	private PartnerApiLogicService service;
 	
+	@PostConstruct
+	public void init() {
+		this.baseService = service;
+	}
+	
+	/*
 	@Override
 	@PostMapping("")
 	public Header<PartnerApiResponse> create(@RequestBody Header<PartnerApiRequest> request) {
@@ -53,6 +62,6 @@ public class PartnerApiController implements CrudInterface<PartnerApiRequest, Pa
 		log.info("delete id: {}", id);
 		return service.delete(id);
 	}
-
+	*/
 	
 }

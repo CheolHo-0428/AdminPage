@@ -1,5 +1,7 @@
 package com.example.study.controller.api;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.study.controller.CrudController;
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.CategoryApiRequest;
@@ -18,14 +21,20 @@ import com.example.study.service.CategoryApiLogicService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+//@Slf4j
 @RestController
 @RequestMapping("/api/category")
-public class CategoryApiController implements CrudInterface<CategoryApiRequest, CategoryApiResponse> {
+public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse> {
 	
 	@Autowired
 	private CategoryApiLogicService service;
-
+	
+	@PostConstruct
+	public void init(){
+		this.baseService = service;
+	}
+	
+	/*
 	@Override
 	@PostMapping("")
 	public Header<CategoryApiResponse> create(@RequestBody Header<CategoryApiRequest> request) {
@@ -53,7 +62,7 @@ public class CategoryApiController implements CrudInterface<CategoryApiRequest, 
 		log.info("delete id: {}", id);
 		return service.delete(id);
 	}
-	
+	*/
 	
 	
 }
