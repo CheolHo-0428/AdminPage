@@ -5,20 +5,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.OrderDetailApiRequest;
 import com.example.study.model.network.response.OrderDetailApiResponse;
 import com.example.study.repository.ItemRepositroy;
-import com.example.study.repository.OrderDetailRepository;
 import com.example.study.repository.OrderGroupRepository;
 
 @Service
-public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
+public class OrderDetailApiLogicService extends BaseService<OrderDetailApiRequest, OrderDetailApiResponse, OrderDetail> {
 	
-	@Autowired
-	private OrderDetailRepository orderDetailRepo;
+	// JpaRepository<OrderDetail, Long> baseRepo === OrderDetailRepository OrderDetailRepository
 	
 	@Autowired
 	private OrderGroupRepository orderGroupRepo;
@@ -41,7 +38,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 						.item(itemRepo.getOne(apiRequest.getItemId()))
 						.build();
 		
-		OrderDetail newOrderDetail = orderDetailRepo.save(orderDetail);
+		OrderDetail newOrderDetail = baseRepo.save(orderDetail);
 		
 		// 3.응답한다.
 		return response(newOrderDetail);
@@ -50,7 +47,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 	@Override
 	public Header<OrderDetailApiResponse> read(Long id) {
 		//1. 데이터를 찾는다.
-		Optional<OrderDetail> optional = orderDetailRepo.findById(id);
+		Optional<OrderDetail> optional = baseRepo.findById(id);
 		
 		//2. 응답한다.
 		return optional
@@ -64,7 +61,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 		OrderDetailApiRequest apiRequest =  request.getData();
 		
 		// 2.업데이트할 데이터를 찾는다.
-		Optional<OrderDetail> optional = orderDetailRepo.findById(apiRequest.getId());
+		Optional<OrderDetail> optional = baseRepo.findById(apiRequest.getId());
 		
 		// 3. 데이터를 업데이트 시킨다.
 		return optional
@@ -78,7 +75,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 						.setItem(itemRepo.getOne(apiRequest.getItemId()));
 					return orderDetail;
 				})
-				.map(updateData -> orderDetailRepo.save(updateData))
+				.map(updateData -> baseRepo.save(updateData))
 				.map(updateData -> response(updateData))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));
 	}
@@ -86,12 +83,12 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 	@Override
 	public Header delete(Long id) {
 		//1. 삭제할 데이터를 찾는다.
-		Optional<OrderDetail> optional =  orderDetailRepo.findById(id);
+		Optional<OrderDetail> optional =  baseRepo.findById(id);
 		
 		//2. 데이터를 삭제한다.
 		return optional
 				.map(orderDetail -> {
-					orderDetailRepo.delete(orderDetail);
+					baseRepo.delete(orderDetail);
 					return Header.OK();
 				})
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));

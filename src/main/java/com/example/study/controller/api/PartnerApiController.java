@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.study.controller.CrudController;
 import com.example.study.ifs.CrudInterface;
+import com.example.study.model.entity.Partner;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.PartnerApiRequest;
 import com.example.study.model.network.response.PartnerApiResponse;
@@ -24,8 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 //@Slf4j
 @RestController
 @RequestMapping("/api/partner")
-public class PartnerApiController extends CrudController<PartnerApiRequest, PartnerApiResponse> {
+public class PartnerApiController extends CrudController<PartnerApiRequest, PartnerApiResponse, Partner> {
 	
+	/*
 	@Autowired
 	private PartnerApiLogicService service;
 	
@@ -34,7 +36,7 @@ public class PartnerApiController extends CrudController<PartnerApiRequest, Part
 		this.baseService = service;
 	}
 	
-	/*
+	
 	@Override
 	@PostMapping("")
 	public Header<PartnerApiResponse> create(@RequestBody Header<PartnerApiRequest> request) {

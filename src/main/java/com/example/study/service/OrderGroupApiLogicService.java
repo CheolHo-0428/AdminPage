@@ -16,10 +16,9 @@ import com.example.study.repository.OrderGroupRepository;
 import com.example.study.repository.UsersRepository;
 
 @Service
-public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
+public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest, OrderGroupApiResponse, OrderGroup> {
 	
-	@Autowired
-	private OrderGroupRepository orderGroupRepo;
+	// 위는 JpaRepository<OrderGroup, Long> baseRepo === OrderGroupRepository orderGroupRepository
 	
 	@Autowired
 	private UsersRepository usersRepo;
@@ -43,7 +42,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 				.users(usersRepo.getOne(body.getUsersId()))
 				.build();
 		
-		OrderGroup newOrderGroup =  orderGroupRepo.save(orderGroup);
+		OrderGroup newOrderGroup =  baseRepo.save(orderGroup);
 		
 		//3. entity에 저장값을 응답한다.
 		return response(newOrderGroup);
@@ -52,7 +51,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 	@Override
 	public Header<OrderGroupApiResponse> read(Long id) {
 		
-		Optional<OrderGroup> optional =  orderGroupRepo.findById(id);
+		Optional<OrderGroup> optional =  baseRepo.findById(id);
 		
 		return optional
 //				.map(orderGroup -> response(orderGroup))
@@ -66,7 +65,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 		OrderGroupApiRequest body = request.getData();
 		
 		//2.업데이트 할 데이터를 찾는다.
-		Optional<OrderGroup> optional = orderGroupRepo.findById(body.getId());
+		Optional<OrderGroup> optional = baseRepo.findById(body.getId());
 		
 		return optional
 			.map(orderGroup -> {
@@ -84,7 +83,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 				
 				return orderGroup;
 			})
-			.map(updateOrderGroup -> orderGroupRepo.save(updateOrderGroup))
+			.map(updateOrderGroup -> baseRepo.save(updateOrderGroup))
 			.map(changeOrderGroup -> response(changeOrderGroup))
 			.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다.")); 
 	}
@@ -92,11 +91,11 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 	@Override
 	public Header delete(Long id) {
 		
-		Optional<OrderGroup> optional = orderGroupRepo.findById(id);
+		Optional<OrderGroup> optional = baseRepo.findById(id);
 		
 		return optional
 				.map(orderGroup -> {
-						orderGroupRepo.delete(orderGroup);
+						baseRepo.delete(orderGroup);
 						return Header.OK();
 					})
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));

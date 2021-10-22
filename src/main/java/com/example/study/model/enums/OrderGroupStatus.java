@@ -7,9 +7,10 @@ import lombok.Getter;
 @Getter
 public enum OrderGroupStatus {
 	
-	READY(0,"준비중", "배송 준비중"),
-	SHIPPING(1, "배송중", "상품 배송중"),
-	COMPLETE(2, "배송완료", "상품 배송완료");
+	ORDERING(0,"주문중", "주문중"),
+	COMPLETE(1, "배송완료", "배송완료"),
+	CONFIRM(2, "확인", "확인");
+	
 	
 	private Integer id;
 	

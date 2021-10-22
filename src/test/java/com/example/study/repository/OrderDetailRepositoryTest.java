@@ -29,7 +29,7 @@ public class OrderDetailRepositoryTest extends StudyApplicationTests {
 	public void create() {
 		
 		OrderDetail od = new OrderDetail();
-		od.setStatus(OrderDetailStatus.REGISTERED);
+		od.setStatus(OrderDetailStatus.ORDERING);
 		od.setArrivalDate(LocalDateTime.now().plusDays(2));
 		od.setQuantity(1);
 		od.setTotalPrice(BigDecimal.valueOf(100000));

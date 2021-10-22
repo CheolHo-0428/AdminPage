@@ -35,7 +35,7 @@ public class CategoryRepositoryTest extends StudyApplicationTests{
 	//@Test
 	public void read() {
 		//Optional<Category> category =  repo.findById(1L);
-		Optional<Category> category = repo.findByType("COMPUTER");
+		Optional<Category> category = repo.findByType(CategoryType.COMPUTER);
 		category.ifPresent(c -> {
 			Assertions.assertEquals(c.getType(), "COMPUTER");
 			System.out.println(c.toString());

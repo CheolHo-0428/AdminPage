@@ -15,10 +15,9 @@ import com.example.study.model.network.response.UserApiResponse;
 import com.example.study.repository.UsersRepository;
 
 @Service
-public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse>{
+public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, Users>{
 	
-	@Autowired
-	private UsersRepository repo;
+	// JpaRepository<Users, Long> baseRepo === UsersRepository usersRepository
 	
 	// 1. request data
 	// 2. user 생성
@@ -39,7 +38,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 				.registeredAt(LocalDateTime.now())
 				.build();
 					
-		Users newUser =  repo.save(user);
+		Users newUser =  baseRepo.save(user);
 		
 		// 3. 생성된 데이터 -> UserApiResponse return
 		return response(newUser);
@@ -48,7 +47,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 	@Override
 	public Header<UserApiResponse> read(Long id) {
 		// id -> repository getOne, getById
-		Optional<Users> optional = repo.findById(id);
+		Optional<Users> optional = baseRepo.findById(id);
 		
 		// user -> userApiResponse return
 		return optional
@@ -62,7 +61,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 		// 1. data
 		UserApiRequest userApiRequest = request.getData();
 		// 2. id -> user 데이터를 찾고
-		Optional<Users> optional = repo.findById(userApiRequest.getId());
+		Optional<Users> optional = baseRepo.findById(userApiRequest.getId());
 		
 		// 3. update
 		return optional.map(user -> {
@@ -75,7 +74,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 					.setUnregisteredAt(userApiRequest.getUnregisteredAt());
 				return user;
 			})
-				.map(user -> repo.save(user))
+				.map(user -> baseRepo.save(user))
 				.map(updateUser -> response(updateUser))
 				.orElseGet(() -> Header.ERROR("데이터 없음")); // 4. userApiResponse	
 	}
@@ -83,11 +82,11 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 	@Override
 	public Header delete(Long id) {
 		// 1.id -> repository -> user
-		Optional<Users> optional = repo.findById(id);
+		Optional<Users> optional = baseRepo.findById(id);
 		
 		// 2. repository -> delete
 		return optional.map(user -> {
-					repo.delete(user);
+					baseRepo.delete(user);
 					return Header.OK();
 					})
 					.orElseGet(() -> Header.ERROR("데이터 없음"));

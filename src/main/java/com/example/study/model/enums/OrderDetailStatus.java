@@ -6,8 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum OrderDetailStatus {
-	REGISTERED(0, "등록", "주문상품 등록"),
-	UNREGISTERED(1, "등록해지", "주문상품 해지");
+	
+	ORDERING(0,"주문중", "주문중"),
+	COMPLETE(1, "배송완료", "배송완료"),
+	CONFIRM(2, "확인", "확인");
 	
 	private Integer id;
 	

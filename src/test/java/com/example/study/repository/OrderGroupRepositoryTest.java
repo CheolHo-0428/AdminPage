@@ -27,7 +27,7 @@ public class OrderGroupRepositoryTest extends StudyApplicationTests{
 	public void create() {
 		OrderGroup orderGroup = new OrderGroup();
 		
-		orderGroup.setStatus(OrderGroupStatus.READY);
+		orderGroup.setStatus(OrderGroupStatus.ORDERING);
 		orderGroup.setOrderType(OrderGroupOrderType.ALL);
 		orderGroup.setRevAddress("서울시 강남구");
 		orderGroup.setRevName("홍길순");

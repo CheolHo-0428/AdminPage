@@ -1,31 +1,19 @@
 package com.example.study.controller.api;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.study.controller.CrudController;
-import com.example.study.ifs.CrudInterface;
-import com.example.study.model.network.Header;
+import com.example.study.model.entity.Category;
 import com.example.study.model.network.request.CategoryApiRequest;
 import com.example.study.model.network.response.CategoryApiResponse;
-import com.example.study.service.CategoryApiLogicService;
-
-import lombok.extern.slf4j.Slf4j;
 
 //@Slf4j
 @RestController
 @RequestMapping("/api/category")
-public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse> {
+public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse, Category> {
 	
+	/*
 	@Autowired
 	private CategoryApiLogicService service;
 	
@@ -34,7 +22,7 @@ public class CategoryApiController extends CrudController<CategoryApiRequest, Ca
 		this.baseService = service;
 	}
 	
-	/*
+	
 	@Override
 	@PostMapping("")
 	public Header<CategoryApiResponse> create(@RequestBody Header<CategoryApiRequest> request) {

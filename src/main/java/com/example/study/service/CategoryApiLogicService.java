@@ -13,10 +13,9 @@ import com.example.study.model.network.response.CategoryApiResponse;
 import com.example.study.repository.CategoryRepository;
 
 @Service
-public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest, CategoryApiResponse> {
+public class CategoryApiLogicService extends BaseService<CategoryApiRequest, CategoryApiResponse, Category> {
 	
-	@Autowired
-	private CategoryRepository repo;
+	//JpaRepository<Category, Long> baseRepo === CategoryRepository categoryRepository
 
 	@Override
 	public Header<CategoryApiResponse> create(Header<CategoryApiRequest> request) {
@@ -28,7 +27,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 					.title(apiRequest.getTitle())
 					.build();
 		
-		Category newCategory = repo.save(category);
+		Category newCategory = baseRepo.save(category);
 		
 		return response(newCategory);
 	}
@@ -36,7 +35,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 	@Override
 	public Header<CategoryApiResponse> read(Long id) {
 		// 1.데이터를 찾는다.
-		Optional<Category> optional =  repo.findById(id);
+		Optional<Category> optional = baseRepo.findById(id);
 		
 		return optional
 				.map(category -> response(category))
@@ -49,7 +48,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 		CategoryApiRequest apiRequest = request.getData();
 		
 		// 2.업데이트할 데이터를 찾는다.
-		Optional<Category> optional =  repo.findById(apiRequest.getId());
+		Optional<Category> optional = baseRepo.findById(apiRequest.getId());
 		
 		// 3.찾은데이터를 엔티티에 넣고, 디비에 저장한다.
 		return optional
@@ -61,7 +60,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 					
 					return category;
 				})
-				.map(updateCategory -> repo.save(updateCategory))
+				.map(updateCategory -> baseRepo.save(updateCategory))
 				.map(updateCategory -> response(updateCategory))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));
 	}
@@ -69,11 +68,11 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 	@Override
 	public Header delete(Long id) {
 		// 1.삭제할 데이터를 찾는다.
-		Optional<Category> optional =  repo.findById(id);
+		Optional<Category> optional =  baseRepo.findById(id);
 		
 		return optional
 				.map(category -> {
-					repo.delete(category);
+					baseRepo.delete(category);
 					return Header.OK();
 					})
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));

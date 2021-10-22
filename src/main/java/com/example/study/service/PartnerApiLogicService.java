@@ -15,10 +15,9 @@ import com.example.study.repository.CategoryRepository;
 import com.example.study.repository.PartnerRepository;
 
 @Service
-public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
+public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiResponse, Partner> {
 	
-	@Autowired
-	private PartnerRepository partnerRepo;
+	// JpaRepository<Partner, Long> baseRepo === PartnerRepository partnerRepository
 	
 	@Autowired
 	private CategoryRepository categoryRepo;
@@ -41,7 +40,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 				.category(categoryRepo.getOne(apiRequest.getCategoryId()))
 				.build();
 				
-		Partner newPartner = partnerRepo.save(partner);
+		Partner newPartner = baseRepo.save(partner);
 		
 		return response(newPartner);
 	}
@@ -49,7 +48,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 	@Override
 	public Header<PartnerApiResponse> read(Long id) {
 		//1.데이터 찾기
-		Optional<Partner> optional = partnerRepo.findById(id);
+		Optional<Partner> optional = baseRepo.findById(id);
 		
 		//2.데이터 응답
 		return optional
@@ -63,7 +62,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 		PartnerApiRequest apiRequest = request.getData();
 		
 		//2.업데이트할 데이터 찾기
-		Optional<Partner> optional = partnerRepo.findById(apiRequest.getId());
+		Optional<Partner> optional = baseRepo.findById(apiRequest.getId());
 		
 		return optional
 				.map(partner -> {
@@ -82,7 +81,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 					
 					return partner;
 				})
-				.map(updatePartner -> partnerRepo.save(updatePartner))
+				.map(updatePartner -> baseRepo.save(updatePartner))
 				.map(updatePartner -> response(updatePartner))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));	
 	}
@@ -90,11 +89,11 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 	@Override
 	public Header delete(Long id) {
 		//1. 삭제할 데이터 찾기
-		Optional<Partner> optional = partnerRepo.findById(id);
+		Optional<Partner> optional = baseRepo.findById(id);
 		
 		return optional
 				.map(partner -> {
-					partnerRepo.delete(partner);
+					baseRepo.delete(partner);
 					return Header.OK();
 				})
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));
