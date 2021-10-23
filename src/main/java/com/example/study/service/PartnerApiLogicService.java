@@ -1,18 +1,21 @@
 package com.example.study.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.Partner;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.PartnerApiRequest;
 import com.example.study.model.network.response.PartnerApiResponse;
 import com.example.study.repository.CategoryRepository;
-import com.example.study.repository.PartnerRepository;
 
 @Service
 public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiResponse, Partner> {
@@ -42,7 +45,9 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 				
 		Partner newPartner = baseRepo.save(partner);
 		
-		return response(newPartner);
+		PartnerApiResponse apiResponse = response(newPartner); 
+		
+		return Header.OK(apiResponse);
 	}
 
 	@Override
@@ -53,7 +58,27 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 		//2.데이터 응답
 		return optional
 				.map(partner -> response(partner))
+				.map(partner -> Header.OK(partner))
 				.orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+	}
+	
+	@Override
+	public Header<List<PartnerApiResponse>> search(Pageable pageable) {
+		
+		Page<Partner> page = baseRepo.findAll(pageable);
+		
+		List<PartnerApiResponse> partnerList = page.stream()
+					.map(partner -> response(partner))
+					.collect(Collectors.toList());
+		
+		Pagination pagination = Pagination.builder()
+				.totalPages(page.getTotalPages())
+				.totalElements(page.getTotalElements())
+				.currentPage(page.getNumber())
+				.currentElements(page.getNumberOfElements())
+				.build();
+		
+		return Header.OK(partnerList, pagination);
 	}
 
 	@Override
@@ -83,6 +108,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 				})
 				.map(updatePartner -> baseRepo.save(updatePartner))
 				.map(updatePartner -> response(updatePartner))
+				.map(updatePartner -> Header.OK(updatePartner))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));	
 	}
 
@@ -99,7 +125,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));
 	}
 	
-	private Header<PartnerApiResponse> response(Partner partner){
+	private PartnerApiResponse response(Partner partner){
 		
 		PartnerApiResponse body = PartnerApiResponse.builder()
 					.id(partner.getId())
@@ -115,7 +141,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 					.categoryId(partner.getCategory().getId())
 					.build();
 		
-		return Header.OK(body);
+		return body;
 	}
 
 	

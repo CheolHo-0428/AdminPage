@@ -1,12 +1,17 @@
 package com.example.study.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.OrderDetailApiRequest;
 import com.example.study.model.network.response.OrderDetailApiResponse;
 import com.example.study.repository.ItemRepositroy;
@@ -41,7 +46,9 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 		OrderDetail newOrderDetail = baseRepo.save(orderDetail);
 		
 		// 3.응답한다.
-		return response(newOrderDetail);
+		OrderDetailApiResponse apiResponse = response(newOrderDetail);
+		
+		return Header.OK(apiResponse);
 	}
 
 	@Override
@@ -52,7 +59,26 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 		//2. 응답한다.
 		return optional
 				.map(orderDetail -> response(orderDetail))
+				.map(orderDetail -> Header.OK(orderDetail))
 				.orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+	}
+	
+	@Override
+	public Header<List<OrderDetailApiResponse>> search(Pageable pageable) {
+		Page<OrderDetail> page = baseRepo.findAll(pageable);
+		
+		List<OrderDetailApiResponse> orderDetailList = page.stream()
+				.map(orderDetail -> response(orderDetail))
+				.collect(Collectors.toList());
+		
+		Pagination pagination = Pagination.builder()
+				.totalPages(page.getTotalPages())
+				.totalElements(page.getTotalElements())
+				.currentPage(page.getNumber())
+				.currentElements(page.getNumberOfElements())
+				.build();
+		
+		return Header.OK(orderDetailList, pagination);
 	}
 
 	@Override
@@ -77,6 +103,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 				})
 				.map(updateData -> baseRepo.save(updateData))
 				.map(updateData -> response(updateData))
+				.map(updateData -> Header.OK(updateData))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));
 	}
 
@@ -94,7 +121,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));
 	}
 	
-	private Header<OrderDetailApiResponse> response(OrderDetail detail) {
+	private OrderDetailApiResponse response(OrderDetail detail) {
 		
 		OrderDetailApiResponse body = OrderDetailApiResponse.builder()
 					.id(detail.getId())
@@ -106,7 +133,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 					.itemId(detail.getItem().getId())
 					.build();
 				
-		return Header.OK(body);
+		return body;
 	}
 	
 }

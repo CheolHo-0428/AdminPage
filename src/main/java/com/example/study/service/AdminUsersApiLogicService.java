@@ -1,12 +1,17 @@
 package com.example.study.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.study.model.entity.AdminUsers;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.AdminUsersApiRequest;
 import com.example.study.model.network.response.AdminUsersApiResponse;
 
@@ -32,7 +37,7 @@ public class AdminUsersApiLogicService extends BaseService<AdminUsersApiRequest,
 		
 		AdminUsers newAdminUsers =  baseRepo.save(adminUsers);
 		
-		return response(newAdminUsers);
+		return Header.OK(response(newAdminUsers));
 	}
 
 	@Override
@@ -41,8 +46,27 @@ public class AdminUsersApiLogicService extends BaseService<AdminUsersApiRequest,
 		Optional<AdminUsers> optional =  baseRepo.findById(id);
 		
 		return optional
-				.map(adminUsers -> response(adminUsers))
+				.map(adminUsers -> Header.OK(response(adminUsers)))
 				.orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+	}
+	
+	
+	@Override
+	public Header<List<AdminUsersApiResponse>> search(Pageable pageable) {
+		Page<AdminUsers> adminUsers = baseRepo.findAll(pageable);
+		
+		List<AdminUsersApiResponse> adminList = adminUsers.stream()
+					.map(adminUser -> response(adminUser))
+					.collect(Collectors.toList());
+		
+		Pagination pagination = Pagination.builder()
+				.totalPages(adminUsers.getTotalPages())
+				.totalElements(adminUsers.getTotalElements())
+				.currentPage(adminUsers.getNumber())
+				.currentElements(adminUsers.getNumberOfElements())
+				.build();
+		
+		return Header.OK(adminList, pagination);
 	}
 
 	@Override
@@ -71,7 +95,7 @@ public class AdminUsersApiLogicService extends BaseService<AdminUsersApiRequest,
 					return adminUsers;
 				})
 				.map(updateAdminUsers -> baseRepo.save(updateAdminUsers))
-				.map(updateAdminUsers -> response(updateAdminUsers))
+				.map(updateAdminUsers -> Header.OK(response(updateAdminUsers)))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));
 	}
 
@@ -88,7 +112,7 @@ public class AdminUsersApiLogicService extends BaseService<AdminUsersApiRequest,
 	}
 
 	
-	private Header<AdminUsersApiResponse> response(AdminUsers adminUser){
+	private AdminUsersApiResponse response(AdminUsers adminUser){
 		AdminUsersApiResponse body = AdminUsersApiResponse.builder()
 					.id(adminUser.getId())
 					.account(adminUser.getAccount())
@@ -102,7 +126,7 @@ public class AdminUsersApiLogicService extends BaseService<AdminUsersApiRequest,
 					.unregisteredAt(adminUser.getUnregisteredAt())
 					.build();
 		
-		return Header.OK(body);
+		return body;
 	}
 	
 }

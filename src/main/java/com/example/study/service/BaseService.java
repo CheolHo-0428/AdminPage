@@ -13,5 +13,7 @@ public abstract class BaseService<Req, Res, Entity> implements CrudInterface<Req
 	protected JpaRepository<Entity, Long> baseRepo;
 	
 	// 위는 JpaRepository<Item, Long> baseRepo === ItemRepository itemRepository
+	
+	
 
 }

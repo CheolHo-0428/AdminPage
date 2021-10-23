@@ -1,13 +1,18 @@
 package com.example.study.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.study.model.entity.Item;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.ItemApiRequest;
 import com.example.study.model.network.response.ItemApiResponse;
 import com.example.study.repository.PartnerRepository;
@@ -38,16 +43,38 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 				
 		Item newItem = baseRepo.save(item);
 		
-		return response(newItem);
+		ItemApiResponse itemApiResponse = response(newItem); 
+		
+		return Header.OK(itemApiResponse);
 	}
 
 	@Override
 	public Header<ItemApiResponse> read(Long id) {
 		Optional<Item> optional = baseRepo.findById(id);
 		
-		return optional.map(item -> response(item))
+		return optional
+				.map(item -> response(item))
+				.map(item -> Header.OK(item))
 				.orElseGet(() -> Header.ERROR("데이터가 없습니다."));
 			
+	}
+	
+	@Override
+	public Header<List<ItemApiResponse>> search(Pageable pageable) {
+		Page<Item> items = baseRepo.findAll(pageable);
+		
+		List<ItemApiResponse> itemList = items.stream()
+				.map(item -> response(item))
+				.collect(Collectors.toList());
+		
+		Pagination pagination = Pagination.builder()
+				.totalPages(items.getTotalPages())
+				.totalElements(items.getTotalElements())
+				.currentPage(items.getNumber())
+				.currentElements(items.getNumberOfElements())
+				.build();
+		
+		return Header.OK(itemList, pagination);
 	}
 
 	@Override
@@ -71,6 +98,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 			})
 				.map(item -> baseRepo.save(item))
 				.map(item -> response(item))
+				.map(item -> Header.OK(item))
 				.orElseGet(() -> Header.ERROR("데이터가 없습니다."));
 	}
 
@@ -87,7 +115,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 
 	}
 	
-	private Header<ItemApiResponse> response(Item item){
+	private ItemApiResponse response(Item item){
 		
 		ItemApiResponse body = ItemApiResponse.builder()
 										.id(item.getId())
@@ -103,6 +131,6 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 										.build();
 		
 		
-		return Header.OK(body);
+		return body;
 	}
 }

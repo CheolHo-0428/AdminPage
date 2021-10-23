@@ -1,17 +1,36 @@
 package com.example.study.controller.api;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.study.controller.CrudController;
 import com.example.study.model.entity.Category;
+import com.example.study.model.network.Header;
 import com.example.study.model.network.request.CategoryApiRequest;
 import com.example.study.model.network.response.CategoryApiResponse;
 
-//@Slf4j
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/category")
 public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse, Category> {
+
+	@Override
+	@GetMapping("")
+	public Header<List<CategoryApiResponse>> search(
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 10)
+			Pageable pageable) {
+		
+		log.info("{}", pageable);
+		return baseService.search(pageable);
+	}
 	
 	/*
 	@Autowired

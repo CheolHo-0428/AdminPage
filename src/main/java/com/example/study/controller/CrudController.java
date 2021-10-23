@@ -1,6 +1,9 @@
 package com.example.study.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +37,13 @@ public abstract class CrudController<Req, Res, Entity> implements CrudInterface<
 	public Header<Res> read(@PathVariable Long id) {
 		log.info("read id: {}", id);
 		return baseService.read(id);
+	}
+	
+	@Override
+	@GetMapping("")
+	public Header<List<Res>> search(Pageable pageable) {
+		log.info("{}", pageable);
+		return baseService.search(pageable);
 	}
 
 	@Override

@@ -1,13 +1,18 @@
 package com.example.study.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.Category;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.CategoryApiRequest;
 import com.example.study.model.network.response.CategoryApiResponse;
 import com.example.study.repository.CategoryRepository;
@@ -29,7 +34,9 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 		
 		Category newCategory = baseRepo.save(category);
 		
-		return response(newCategory);
+		CategoryApiResponse body = response(newCategory);
+		
+		return Header.OK(body);
 	}
 
 	@Override
@@ -39,7 +46,27 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 		
 		return optional
 				.map(category -> response(category))
+				.map(category -> Header.OK(category))
 				.orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+	}
+
+	
+	@Override
+	public Header<List<CategoryApiResponse>> search(Pageable pageable) {
+		Page<Category> categorys = baseRepo.findAll(pageable);
+		
+		List<CategoryApiResponse> categoryList = categorys.stream()
+				.map(category -> response(category))
+				.collect(Collectors.toList());
+		
+		Pagination pagination = Pagination.builder()
+				.totalPages(categorys.getTotalPages())
+				.totalElements(categorys.getTotalElements())
+				.currentPage(categorys.getNumber())
+				.currentElements(categorys.getNumberOfElements())
+				.build();
+		
+		return Header.OK(categoryList, pagination);
 	}
 
 	@Override
@@ -61,7 +88,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 					return category;
 				})
 				.map(updateCategory -> baseRepo.save(updateCategory))
-				.map(updateCategory -> response(updateCategory))
+				.map(updateCategory -> Header.OK(response(updateCategory)))
 				.orElseGet(() -> Header.ERROR("업데이트할 데이터가 없습니다."));
 	}
 
@@ -78,7 +105,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 				.orElseGet(() -> Header.ERROR("삭제할 데이터가 없습니다."));
 	}
 	
-	private Header<CategoryApiResponse> response(Category category){
+	private CategoryApiResponse response(Category category){
 		
 		CategoryApiResponse body = CategoryApiResponse.builder()
 					.id(category.getId())
@@ -86,6 +113,6 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 					.title(category.getTitle())
 					.build();
 		
-		return Header.OK(body);
+		return body;
 	}
 }
